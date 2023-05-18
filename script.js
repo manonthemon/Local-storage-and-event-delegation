@@ -1,7 +1,9 @@
 const addItems = document.querySelector(".add-items");
 const itemsList = document.querySelector(".plates");
-const items = JSON.parse(localStorage.getItem('items') || [])
+const items = JSON.parse(localStorage.getItem('items')) || [];
 
+
+//Function takes user input and sends to local storage
 function addItem(e) {
   e.preventDefault();
   const text = this.querySelector("[name=item]").value;
@@ -16,6 +18,7 @@ function addItem(e) {
   this.reset();
 }
 
+// Function take user input and prints in on page
 function populateList(plates = [], platesList) {
   platesList.innerHTML = plates
     .map((plate, i) => {
@@ -31,6 +34,16 @@ function populateList(plates = [], platesList) {
     .join("");
 }
 
-addItems.addEventListener("submit", addItem);
+//Function which toggles checkboxes and sends to local storage
+function toggleDone(e) {
+    if(!e.target.matches('input')) return 
+    const el = e.target;
+ const index = el.dataset.index
+ items[index].done = !items[index].done;
+ localStorage.setItem('items', JSON.stringify(items))
+ populateList(items, itemsList)
+}
 
+addItems.addEventListener("submit", addItem);
+itemsList.addEventListener("click", toggleDone);
 populateList(items, itemsList)
